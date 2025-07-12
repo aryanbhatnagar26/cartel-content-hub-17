@@ -1,89 +1,113 @@
+
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Target, TrendingUp, Zap } from "lucide-react";
+import { ArrowRight, Play, Users, Trophy, Target } from "lucide-react";
+
+interface HeroContent {
+  badge: string;
+  headline: string;
+  subheadline: string;
+  description: string;
+  primaryButton: string;
+  secondaryButton: string;
+  stats: Array<{
+    number: string;
+    label: string;
+  }>;
+}
+
+const defaultContent: HeroContent = {
+  badge: "Content Marketing Domination",
+  headline: "Content That Commands Attention",
+  subheadline: "Converts Like Crazy",
+  description: "We don't create content—we engineer influence. Our battle-tested strategies turn your brand into the undisputed authority that competitors fear and customers crave.",
+  primaryButton: "Start Dominating Now",
+  secondaryButton: "Watch Our Process",
+  stats: [
+    { number: "500%", label: "Average ROI Increase" },
+    { number: "2M+", label: "Content Views Generated" },
+    { number: "150+", label: "Brands Transformed" }
+  ]
+};
 
 const Hero = () => {
-  return (
-    <section id="home" className="min-h-screen bg-gradient-hero flex items-center relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-20 left-10 w-32 h-32 rounded-full bg-primary"></div>
-        <div className="absolute top-40 right-20 w-24 h-24 rounded-full bg-primary"></div>
-        <div className="absolute bottom-32 left-1/4 w-16 h-16 rounded-full bg-primary"></div>
-        <div className="absolute bottom-20 right-10 w-20 h-20 rounded-full bg-primary"></div>
-      </div>
+  const [content, setContent] = useState<HeroContent>(defaultContent);
 
+  useEffect(() => {
+    const saved = localStorage.getItem('heroContent');
+    if (saved) {
+      try {
+        const parsedContent = JSON.parse(saved);
+        setContent(parsedContent);
+      } catch (error) {
+        console.error('Error parsing hero content:', error);
+        setContent(defaultContent);
+      }
+    }
+  }, []);
+
+  const getIconForStat = (index: number) => {
+    const icons = [Target, Users, Trophy];
+    const IconComponent = icons[index % icons.length];
+    return <IconComponent className="w-6 h-6 text-primary" />;
+  };
+
+  return (
+    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-background/95 overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+      <div className="absolute top-1/4 -right-64 w-96 h-96 bg-gradient-primary rounded-full blur-3xl opacity-10"></div>
+      <div className="absolute bottom-1/4 -left-64 w-96 h-96 bg-gradient-secondary rounded-full blur-3xl opacity-10"></div>
+      
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-5xl mx-auto">
           {/* Badge */}
-          <div className="animate-fade-in">
-            <Badge className="mb-6 px-4 py-2 bg-primary/10 text-primary border-primary/20 hover:bg-primary/20">
-              <Zap className="w-4 h-4 mr-2" />
-              Premium Content Marketing Agency
-            </Badge>
-          </div>
-
+          <Badge className="mb-6 px-4 py-2 bg-gradient-primary text-white hover:bg-gradient-primary/90 text-sm font-medium">
+            {content.badge}
+          </Badge>
+          
           {/* Main Headline */}
-          <div className="animate-slide-up">
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold mb-6 leading-tight">
-              Dominate Your Market
-              <br />
-              <span className="text-primary bg-gradient-to-r from-primary to-brand-green-dark bg-clip-text text-transparent">
-                With Content That Converts
-              </span>
-            </h1>
-          </div>
-
-          {/* Subtitle */}
-          <div className="animate-fade-in delay-200">
-            <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground mb-8 max-w-4xl mx-auto leading-relaxed">
-              We don't just create content—we orchestrate campaigns that
-              captivate audiences, build empires, and turn your brand into an
-              unstoppable force.
-            </p>
-          </div>
-
+          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold mb-6 leading-tight">
+            {content.headline}
+            <br />
+            <span className="text-transparent bg-clip-text bg-gradient-primary">
+              {content.subheadline}
+            </span>
+          </h1>
+          
+          {/* Description */}
+          <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
+            {content.description}
+          </p>
+          
           {/* CTA Buttons */}
-          <div className="animate-slide-up delay-300 flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <Button 
-              size="lg" 
-              className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg font-semibold shadow-soft hover:shadow-card transition-all duration-300 group"
-            >
-              Start Your Domination
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <Button size="lg" className="bg-gradient-primary hover:bg-gradient-primary/90 text-white font-semibold px-8 py-3">
+              {content.primaryButton}
+              <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            <Button 
-              variant="outline" 
-              size="lg" 
-              className="border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8 py-6 text-lg font-semibold transition-all duration-300"
-            >
-              View Our Arsenal
+            <Button variant="outline" size="lg" className="font-semibold px-8 py-3">
+              <Play className="mr-2 h-5 w-5" />
+              {content.secondaryButton}
             </Button>
           </div>
-
+          
           {/* Stats */}
-          <div className="animate-fade-in delay-500 grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="text-center">
-              <div className="flex items-center justify-center mb-2">
-                <Target className="w-8 h-8 text-primary mr-2" />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            {content.stats.map((stat, index) => (
+              <div key={index} className="text-center p-6 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50 hover:border-primary/20 transition-all duration-300">
+                <div className="flex items-center justify-center mb-2">
+                  {getIconForStat(index)}
+                </div>
+                <div className="text-3xl sm:text-4xl font-bold text-foreground mb-2">
+                  {stat.number}
+                </div>
+                <div className="text-muted-foreground font-medium">
+                  {stat.label}
+                </div>
               </div>
-              <div className="text-3xl sm:text-4xl font-bold text-primary mb-1">500%</div>
-              <div className="text-muted-foreground font-medium">Average ROI Increase</div>
-            </div>
-            <div className="text-center">
-              <div className="flex items-center justify-center mb-2">
-                <TrendingUp className="w-8 h-8 text-primary mr-2" />
-              </div>
-              <div className="text-3xl sm:text-4xl font-bold text-primary mb-1">2M+</div>
-              <div className="text-muted-foreground font-medium">Audience Reached</div>
-            </div>
-            <div className="text-center">
-              <div className="flex items-center justify-center mb-2">
-                <Zap className="w-8 h-8 text-primary mr-2" />
-              </div>
-              <div className="text-3xl sm:text-4xl font-bold text-primary mb-1">48H</div>
-              <div className="text-muted-foreground font-medium">Campaign Launch Time</div>
-            </div>
+            ))}
           </div>
         </div>
       </div>

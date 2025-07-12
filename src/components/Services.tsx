@@ -1,3 +1,5 @@
+
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,51 +13,61 @@ import {
   ArrowRight 
 } from "lucide-react";
 
-const Services = () => {
-  const services = [
+interface ServiceItem {
+  id: string;
+  title: string;
+  description: string;
+  features: string[];
+  gradient: string;
+}
+
+interface ServicesContent {
+  heading: string;
+  subheading: string;
+  services: ServiceItem[];
+}
+
+const defaultContent: ServicesContent = {
+  heading: "Services That Command Attention",
+  subheading: "We don't follow trends—we create them. Our strategic arsenal is designed to make your competitors question their life choices.",
+  services: [
     {
-      icon: Megaphone,
-      title: "Brand Strategy",
-      description: "Forge an unbreakable brand identity that commands respect and drives loyalty.",
-      features: ["Brand Positioning", "Competitive Analysis", "Message Architecture"],
-      gradient: "from-pink-500 to-rose-500"
+      id: "1",
+      title: "Content Strategy & Planning",
+      description: "We craft content strategies that don't just engage—they convert browsers into buyers and followers into fanatics.",
+      features: ["Audience Research & Personas", "Content Calendar Development", "Competitive Analysis", "ROI-Focused Planning"],
+      gradient: "from-blue-400 to-purple-600"
     },
     {
-      icon: PenTool,
-      title: "Content Creation",
-      description: "Premium content that doesn't just engage—it converts prospects into devoted customers.",
-      features: ["Blog Articles", "Social Media", "Video Scripts"],
-      gradient: "from-blue-500 to-purple-500"
-    },
-    {
-      icon: BarChart3,
-      title: "Performance Marketing",
-      description: "Data-driven campaigns that turn every dollar invested into exponential returns.",
-      features: ["Paid Advertising", "SEO Optimization", "Analytics & Reporting"],
-      gradient: "from-green-500 to-emerald-500"
-    },
-    {
-      icon: Video,
-      title: "Video Production",
-      description: "Cinematic content that stops scrollers in their tracks and builds brand empires.",
-      features: ["Promotional Videos", "Social Content", "Brand Documentaries"],
-      gradient: "from-orange-500 to-red-500"
-    },
-    {
-      icon: Mail,
-      title: "Email Domination",
-      description: "Email sequences that nurture leads and create an army of loyal customers.",
-      features: ["Welcome Series", "Nurture Campaigns", "Conversion Funnels"],
-      gradient: "from-cyan-500 to-blue-500"
-    },
-    {
-      icon: Globe,
-      title: "Digital Ecosystem",
-      description: "Complete digital transformation that positions you as the undisputed industry leader.",
-      features: ["Website Design", "E-commerce", "Digital Strategy"],
-      gradient: "from-violet-500 to-purple-500"
+      id: "2", 
+      title: "Social Media Domination",
+      description: "Turn your social media into a lead-generating machine that works 24/7 to grow your empire.",
+      features: ["Platform-Specific Content", "Community Management", "Influencer Partnerships", "Viral Campaign Creation"],
+      gradient: "from-purple-400 to-pink-600"
     }
-  ];
+  ]
+};
+
+const Services = () => {
+  const [content, setContent] = useState<ServicesContent>(defaultContent);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('servicesContent');
+    if (saved) {
+      try {
+        const parsedContent = JSON.parse(saved);
+        setContent(parsedContent);
+      } catch (error) {
+        console.error('Error parsing services content:', error);
+        setContent(defaultContent);
+      }
+    }
+  }, []);
+
+  const getIconForService = (index: number) => {
+    const icons = [Megaphone, PenTool, BarChart3, Video, Mail, Globe];
+    return icons[index % icons.length];
+  };
 
   return (
     <section id="services" className="py-20 lg:py-32 bg-background">
@@ -66,23 +78,22 @@ const Services = () => {
             Our Arsenal
           </Badge>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-            Services That
+            {content.heading.split(' ').slice(0, -2).join(' ')}
             <br />
-            <span className="text-primary">Dominate Markets</span>
+            <span className="text-primary">{content.heading.split(' ').slice(-2).join(' ')}</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Every weapon in our arsenal is designed to obliterate competition and establish
-            your brand as the ultimate authority.
+            {content.subheading}
           </p>
         </div>
 
         {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {services.map((service, index) => {
-            const IconComponent = service.icon;
+          {content.services.map((service, index) => {
+            const IconComponent = getIconForService(index);
             return (
               <Card 
-                key={service.title}
+                key={service.id}
                 className="group hover:shadow-card transition-all duration-300 hover:-translate-y-2 border-0 shadow-soft bg-card/50 backdrop-blur-sm"
               >
                 <CardHeader className="text-center pb-4">
@@ -96,8 +107,8 @@ const Services = () => {
                 </CardHeader>
                 <CardContent className="pt-0">
                   <ul className="space-y-2 mb-6">
-                    {service.features.map((feature) => (
-                      <li key={feature} className="flex items-center text-sm text-muted-foreground">
+                    {service.features.map((feature, featureIndex) => (
+                      <li key={featureIndex} className="flex items-center text-sm text-muted-foreground">
                         <div className="w-2 h-2 bg-primary rounded-full mr-3"></div>
                         {feature}
                       </li>
