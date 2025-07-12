@@ -18,7 +18,7 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 142 76% 36%;
+    --primary: 142 71% 45%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 142 20% 95%;
@@ -27,32 +27,32 @@ All colors MUST be HSL.
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 142 100% 90%;
-    --accent-foreground: 142 76% 25%;
+    --accent: 142 50% 90%;
+    --accent-foreground: 142 71% 25%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 142 76% 36%;
+    --ring: 142 71% 45%;
 
     --radius: 0.75rem;
 
-    /* Content Cartel Brand Colors - Updated to Green Theme */
-    --brand-green: 142 76% 36%;
-    --brand-green-light: 142 100% 90%;
-    --brand-green-dark: 142 76% 25%;
+    /* Content Cartel Brand Colors - Exact match to screenshot */
+    --brand-green: 142 71% 45%;
+    --brand-green-light: 142 60% 90%;
+    --brand-green-dark: 142 71% 35%;
     --brand-gray: 210 11% 71%;
     --brand-dark: 222.2 84% 4.9%;
     
-    /* Gradients - Updated to Green Theme */
-    --gradient-primary: linear-gradient(135deg, hsl(142 100% 85%), hsl(142 76% 36%));
-    --gradient-hero: linear-gradient(135deg, hsl(142 100% 95%), hsl(142 50% 95%));
+    /* Gradients - Matching screenshot */
+    --gradient-primary: linear-gradient(135deg, hsl(142 60% 85%), hsl(142 71% 45%));
+    --gradient-hero: linear-gradient(135deg, hsl(142 60% 95%), hsl(142 40% 90%));
     
     /* Shadows */
-    --shadow-soft: 0 4px 20px -2px hsl(142 76% 36% / 0.1);
-    --shadow-card: 0 8px 30px -8px hsl(142 76% 36% / 0.15);
+    --shadow-soft: 0 4px 20px -2px hsl(142 71% 45% / 0.1);
+    --shadow-card: 0 8px 30px -8px hsl(142 71% 45% / 0.15);
     
     /* Transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -113,6 +113,7 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 }
 
@@ -124,4 +125,22 @@ All colors MUST be HSL.
 
 .animate-float {
   animation: float 3s ease-in-out infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
 }
