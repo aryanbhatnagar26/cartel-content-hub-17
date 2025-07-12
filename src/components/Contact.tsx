@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,13 +8,63 @@ import { Badge } from "@/components/ui/badge";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+interface ContactContent {
+  heading: string;
+  subheading: string;
+  description: string;
+  formTitle: string;
+  contactInfo: {
+    email: string;
+    emailDescription: string;
+    phone: string;
+    phoneDescription: string;
+    location: string;
+    locationDescription: string;
+  };
+  responseGuarantee: {
+    title: string;
+    description: string;
+  };
+}
+
+const defaultContent: ContactContent = {
+  heading: "Let's Build Your Content Empire",
+  subheading: "Every empire starts with a conversation. Tell us your vision, and we'll show you how to make it reality.",
+  description: "Ready to transform your brand into a market-dominating force? Our strategists are standing by to discuss your vision and create a roadmap to content supremacy.",
+  formTitle: "Start Your Transformation",
+  contactInfo: {
+    email: "hello@contentcartel.in",
+    emailDescription: "For new business inquiries",
+    phone: "+91 7452859955",
+    phoneDescription: "Mon-Fri 9AM-6PM IST",
+    location: "Agra, India",
+    locationDescription: "Where empires are built"
+  },
+  responseGuarantee: {
+    title: "24-Hour Response Guarantee",
+    description: "We respond to all serious inquiries within 24 hours. For urgent projects, call us directly and we'll prioritize your empire-building mission."
+  }
+};
+
 const Contact = () => {
+  const [content, setContent] = useState<ContactContent>(defaultContent);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     projectDetails: ""
   });
   const { toast } = useToast();
+
+  useEffect(() => {
+    const saved = localStorage.getItem('contactContent');
+    if (saved) {
+      try {
+        setContent(JSON.parse(saved));
+      } catch (error) {
+        console.log('Error loading contact content:', error);
+      }
+    }
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,13 +92,12 @@ const Contact = () => {
             Ready to Dominate?
           </Badge>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-            Let's Build Your
+            {content.heading.split(' ').slice(0, 2).join(' ')}
             <br />
-            <span className="text-primary">Content Empire</span>
+            <span className="text-primary">{content.heading.split(' ').slice(2).join(' ')}</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Every empire starts with a conversation. Tell us your vision, and we'll show you
-            how to make it reality.
+            {content.subheading}
           </p>
         </div>
 
@@ -55,7 +105,7 @@ const Contact = () => {
           {/* Contact Form */}
           <Card className="shadow-card border-0 bg-card/80 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="text-2xl font-bold text-primary">Start Your Transformation</CardTitle>
+              <CardTitle className="text-2xl font-bold text-primary">{content.formTitle}</CardTitle>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -121,9 +171,7 @@ const Contact = () => {
               </CardHeader>
               <CardContent className="space-y-6">
                 <p className="text-muted-foreground">
-                  Ready to transform your brand into a market-dominating force? Our strategists
-                  are standing by to discuss your vision and create a roadmap to content
-                  supremacy.
+                  {content.description}
                 </p>
 
                 <div className="space-y-4">
@@ -134,8 +182,8 @@ const Contact = () => {
                     </div>
                     <div>
                       <h4 className="font-semibold text-foreground mb-1">Email</h4>
-                      <p className="text-primary font-medium">hello@contentcartel.in</p>
-                      <p className="text-sm text-muted-foreground">For new business inquiries</p>
+                      <p className="text-primary font-medium">{content.contactInfo.email}</p>
+                      <p className="text-sm text-muted-foreground">{content.contactInfo.emailDescription}</p>
                     </div>
                   </div>
 
@@ -146,8 +194,8 @@ const Contact = () => {
                     </div>
                     <div>
                       <h4 className="font-semibold text-foreground mb-1">Phone</h4>
-                      <p className="text-primary font-medium">+91 7452859955</p>
-                      <p className="text-sm text-muted-foreground">Mon-Fri 9AM-6PM IST</p>
+                      <p className="text-primary font-medium">{content.contactInfo.phone}</p>
+                      <p className="text-sm text-muted-foreground">{content.contactInfo.phoneDescription}</p>
                     </div>
                   </div>
 
@@ -158,8 +206,8 @@ const Contact = () => {
                     </div>
                     <div>
                       <h4 className="font-semibold text-foreground mb-1">Headquarters</h4>
-                      <p className="text-primary font-medium">Agra, India</p>
-                      <p className="text-sm text-muted-foreground">Where empires are built</p>
+                      <p className="text-primary font-medium">{content.contactInfo.location}</p>
+                      <p className="text-sm text-muted-foreground">{content.contactInfo.locationDescription}</p>
                     </div>
                   </div>
                 </div>
@@ -174,10 +222,9 @@ const Contact = () => {
                     <Clock className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-primary mb-2">24-Hour Response Guarantee</h4>
+                    <h4 className="font-semibold text-primary mb-2">{content.responseGuarantee.title}</h4>
                     <p className="text-sm text-muted-foreground">
-                      We respond to all serious inquiries within 24 hours. For urgent projects,
-                      call us directly and we'll prioritize your empire-building mission.
+                      {content.responseGuarantee.description}
                     </p>
                   </div>
                 </div>

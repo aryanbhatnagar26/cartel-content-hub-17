@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -14,6 +13,9 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminBlog from "./pages/admin/AdminBlog";
 import AdminHome from "./pages/admin/AdminHome";
 import AdminServices from "./pages/admin/AdminServices";
+import AdminPortfolio from "./pages/admin/AdminPortfolio";
+import AdminAbout from "./pages/admin/AdminAbout";
+import AdminContact from "./pages/admin/AdminContact";
 
 const queryClient = new QueryClient();
 
@@ -40,9 +42,9 @@ const App = () => (
               <Route index element={<AdminDashboard />} />
               <Route path="home" element={<AdminHome />} />
               <Route path="services" element={<AdminServices />} />
-              <Route path="portfolio" element={<div className="p-8"><h1 className="text-2xl">Portfolio Editor - Coming Soon</h1></div>} />
-              <Route path="about" element={<div className="p-8"><h1 className="text-2xl">About Editor - Coming Soon</h1></div>} />
-              <Route path="contact" element={<div className="p-8"><h1 className="text-2xl">Contact Editor - Coming Soon</h1></div>} />
+              <Route path="portfolio" element={<AdminPortfolio />} />
+              <Route path="about" element={<AdminAbout />} />
+              <Route path="contact" element={<AdminContact />} />
               <Route path="blog" element={<AdminBlog />} />
             </Route>
             

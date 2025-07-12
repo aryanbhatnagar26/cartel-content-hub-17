@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,10 +23,58 @@ const Blog = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
   useEffect(() => {
-    // Load blog posts from localStorage
+    // Load blog posts from localStorage (admin managed)
     const savedPosts = localStorage.getItem('blogPosts');
     if (savedPosts) {
-      setBlogPosts(JSON.parse(savedPosts));
+      try {
+        setBlogPosts(JSON.parse(savedPosts));
+      } catch (error) {
+        console.log('Error loading blog posts:', error);
+        // Set default blog posts
+        const defaultPosts: BlogPost[] = [
+          {
+            id: "1",
+            title: "The Future of Content Marketing: AI-Driven Strategies",
+            excerpt: "Discover how artificial intelligence is revolutionizing content marketing and what it means for your brand's growth strategy.",
+            content: "Full article content here...",
+            author: "Alex Morgan",
+            publishDate: "2024-01-15",
+            readTime: "5 min read",
+            category: "Strategy",
+            tags: ["AI", "Content Marketing", "Strategy"],
+            featured: true,
+            image: "/placeholder.svg"
+          },
+          {
+            id: "2",
+            title: "Building Brand Authority Through Authentic Storytelling",
+            excerpt: "Learn how to craft compelling brand narratives that resonate with your audience and build lasting trust.",
+            content: "Full article content here...",
+            author: "Sarah Chen",
+            publishDate: "2024-01-10",
+            readTime: "7 min read",
+            category: "Branding",
+            tags: ["Branding", "Storytelling", "Authority"],
+            featured: false,
+            image: "/placeholder.svg"
+          },
+          {
+            id: "3",
+            title: "Performance Marketing Metrics That Actually Matter",
+            excerpt: "Cut through the noise and focus on the KPIs that drive real business growth in digital marketing.",
+            content: "Full article content here...",
+            author: "Mike Rodriguez",
+            publishDate: "2024-01-05",
+            readTime: "6 min read",
+            category: "Analytics",
+            tags: ["Metrics", "Performance", "ROI"],
+            featured: false,
+            image: "/placeholder.svg"
+          }
+        ];
+        setBlogPosts(defaultPosts);
+        localStorage.setItem('blogPosts', JSON.stringify(defaultPosts));
+      }
     } else {
       // Set default blog posts
       const defaultPosts: BlogPost[] = [

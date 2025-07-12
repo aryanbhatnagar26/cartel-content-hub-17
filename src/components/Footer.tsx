@@ -119,6 +119,9 @@ const Footer = () => {
                 <a href="#" className="text-gray-400 hover:text-primary text-sm transition-colors duration-200">
                   Cookie Policy
                 </a>
+                <a href="/admin/login" className="text-primary hover:text-primary/80 text-sm transition-colors duration-200 font-medium">
+                  Admin Panel
+                </a>
               </div>
             </div>
             <Button 

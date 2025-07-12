@@ -1,9 +1,56 @@
+
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Quote, Linkedin, Twitter } from "lucide-react";
 
+interface AboutContent {
+  founderName: string;
+  founderTitle: string;
+  founderQuote: string;
+  stats: {
+    experience: string;
+    brandsTransformed: string;
+    revenueGenerated: string;
+  };
+  missionTitle: string;
+  missionDescription: string;
+  ctaTitle: string;
+  ctaDescription: string;
+  ctaButtonText: string;
+}
+
+const defaultContent: AboutContent = {
+  founderName: "Akanshit Bhatnagar",
+  founderTitle: "Founder & Chief Strategist",
+  founderQuote: "I didn't start Content Cartel to be another marketing agency. I built it to be the weapon that transforms ambitious brands into market dominators. Every campaign we craft, every story we tell, is designed with one goal: total market supremacy.",
+  stats: {
+    experience: "5+",
+    brandsTransformed: "140+",
+    revenueGenerated: "₹50Cr+"
+  },
+  missionTitle: "Our Mission",
+  missionDescription: "We believe every brand has the potential to dominate its market. Our mission is to unlock that potential through strategic content marketing, innovative campaigns, and relentless execution that transforms businesses into industry leaders.",
+  ctaTitle: "Ready to Transform Your Brand?",
+  ctaDescription: "Let's build your content empire together and establish your dominance in the market.",
+  ctaButtonText: "Start Your Transformation"
+};
+
 const About = () => {
+  const [content, setContent] = useState<AboutContent>(defaultContent);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('aboutContent');
+    if (saved) {
+      try {
+        setContent(JSON.parse(saved));
+      } catch (error) {
+        console.log('Error loading about content:', error);
+      }
+    }
+  }, []);
+
   return (
     <section id="about" className="py-20 lg:py-32 bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -35,34 +82,31 @@ const About = () => {
 
                 {/* Content */}
                 <div className="p-8 lg:p-12">
-                  <h3 className="text-3xl lg:text-4xl font-bold mb-2">Akanshit Bhatnagar</h3>
+                  <h3 className="text-3xl lg:text-4xl font-bold mb-2">{content.founderName}</h3>
                   <Badge className="mb-6 bg-primary/10 text-primary">
-                    Founder & Chief Strategist
+                    {content.founderTitle}
                   </Badge>
 
                   {/* Quote */}
                   <div className="mb-8">
                     <Quote className="w-8 h-8 text-primary mb-4" />
                     <blockquote className="text-lg text-muted-foreground italic leading-relaxed">
-                      "I didn't start Content Cartel to be another marketing agency. I built it
-                      to be the weapon that transforms ambitious brands into market
-                      dominators. Every campaign we craft, every story we tell, is designed
-                      with one goal: total market supremacy."
+                      "{content.founderQuote}"
                     </blockquote>
                   </div>
 
                   {/* Stats */}
                   <div className="grid grid-cols-3 gap-6 mb-8">
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-primary mb-1">5+</div>
+                      <div className="text-2xl font-bold text-primary mb-1">{content.stats.experience}</div>
                       <div className="text-sm text-muted-foreground">Years Experience</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-primary mb-1">140+</div>
+                      <div className="text-2xl font-bold text-primary mb-1">{content.stats.brandsTransformed}</div>
                       <div className="text-sm text-muted-foreground">Brands Transformed</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-primary mb-1">₹50Cr+</div>
+                      <div className="text-2xl font-bold text-primary mb-1">{content.stats.revenueGenerated}</div>
                       <div className="text-sm text-muted-foreground">Revenue Generated</div>
                     </div>
                   </div>
@@ -86,19 +130,17 @@ const About = () => {
 
         {/* Mission Statement */}
         <div className="text-center mt-16 max-w-4xl mx-auto">
-          <h3 className="text-2xl lg:text-3xl font-bold mb-6">Our Mission</h3>
+          <h3 className="text-2xl lg:text-3xl font-bold mb-6">{content.missionTitle}</h3>
           <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-            We believe every brand has the potential to dominate its market. Our mission is to unlock
-            that potential through strategic content marketing, innovative campaigns, and relentless
-            execution that transforms businesses into industry leaders.
+            {content.missionDescription}
           </p>
           <div className="bg-gradient-primary rounded-2xl p-8 text-center">
-            <h4 className="text-xl font-bold text-white mb-4">Ready to Transform Your Brand?</h4>
+            <h4 className="text-xl font-bold text-white mb-4">{content.ctaTitle}</h4>
             <p className="text-white/90 mb-6">
-              Let's build your content empire together and establish your dominance in the market.
+              {content.ctaDescription}
             </p>
             <Button size="lg" className="bg-white text-primary hover:bg-white/90 font-semibold">
-              Start Your Transformation
+              {content.ctaButtonText}
             </Button>
           </div>
         </div>

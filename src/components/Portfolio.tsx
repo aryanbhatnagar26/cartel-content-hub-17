@@ -1,9 +1,66 @@
+
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, Users, DollarSign, ArrowRight } from "lucide-react";
 
+interface PortfolioContent {
+  heading: string;
+  subheading: string;
+  description: string;
+  featuredCase: {
+    title: string;
+    category: string;
+    description: string;
+    revenueGrowth: string;
+    usersAcquired: string;
+    valuation: string;
+  };
+  stats: {
+    clientsServed: string;
+    successRate: string;
+    revenueGenerated: string;
+    clientRating: string;
+  };
+  clients: string[];
+}
+
+const defaultContent: PortfolioContent = {
+  heading: "Empires We've Built & Conquered",
+  subheading: "From startups to industry giants, witness the transformation of brands into market-dominating forces.",
+  description: "These brands didn't just grow—they dominated. Ready to write your own success story and join the ranks of market leaders?",
+  featuredCase: {
+    title: "TechStart Unicorn",
+    category: "SaaS Startup",
+    description: "Transformed a struggling SaaS startup into a $100M valuation through strategic content marketing and brand positioning.",
+    revenueGrowth: "850%",
+    usersAcquired: "2.3M",
+    valuation: "$100M"
+  },
+  stats: {
+    clientsServed: "140+",
+    successRate: "85%",
+    revenueGenerated: "₹50Cr",
+    clientRating: "4.9★"
+  },
+  clients: ["NUCLEAR", "VIBECRAFT", "Kidult India", "PVR CINEMAS"]
+};
+
 const Portfolio = () => {
+  const [content, setContent] = useState<PortfolioContent>(defaultContent);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('portfolioContent');
+    if (saved) {
+      try {
+        setContent(JSON.parse(saved));
+      } catch (error) {
+        console.log('Error loading portfolio content:', error);
+      }
+    }
+  }, []);
+
   return (
     <section id="portfolio" className="py-20 lg:py-32 bg-gradient-hero">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -13,13 +70,12 @@ const Portfolio = () => {
             Success Stories
           </Badge>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-            Empires We've
+            {content.heading.split(' ').slice(0, 2).join(' ')}
             <br />
-            <span className="text-primary">Built & Conquered</span>
+            <span className="text-primary">{content.heading.split(' ').slice(2).join(' ')}</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            From startups to industry giants, witness the transformation of brands into
-            market-dominating forces.
+            {content.subheading}
           </p>
         </div>
 
@@ -43,12 +99,11 @@ const Portfolio = () => {
                 {/* Content */}
                 <div className="p-8 lg:p-12">
                   <Badge className="mb-4 bg-primary/10 text-primary">
-                    SaaS Startup
+                    {content.featuredCase.category}
                   </Badge>
-                  <h3 className="text-2xl lg:text-3xl font-bold mb-4">TechStart Unicorn</h3>
+                  <h3 className="text-2xl lg:text-3xl font-bold mb-4">{content.featuredCase.title}</h3>
                   <p className="text-muted-foreground mb-6 leading-relaxed">
-                    Transformed a struggling SaaS startup into a $100M valuation through strategic 
-                    content marketing and brand positioning.
+                    {content.featuredCase.description}
                   </p>
 
                   {/* Stats */}
@@ -57,21 +112,21 @@ const Portfolio = () => {
                       <div className="flex items-center justify-center mb-2">
                         <TrendingUp className="w-5 h-5 text-primary mr-1" />
                       </div>
-                      <div className="text-2xl font-bold text-primary">850%</div>
+                      <div className="text-2xl font-bold text-primary">{content.featuredCase.revenueGrowth}</div>
                       <div className="text-sm text-muted-foreground">Revenue Growth</div>
                     </div>
                     <div className="text-center">
                       <div className="flex items-center justify-center mb-2">
                         <Users className="w-5 h-5 text-primary mr-1" />
                       </div>
-                      <div className="text-2xl font-bold text-primary">2.3M</div>
+                      <div className="text-2xl font-bold text-primary">{content.featuredCase.usersAcquired}</div>
                       <div className="text-sm text-muted-foreground">Users Acquired</div>
                     </div>
                     <div className="text-center">
                       <div className="flex items-center justify-center mb-2">
                         <DollarSign className="w-5 h-5 text-primary mr-1" />
                       </div>
-                      <div className="text-2xl font-bold text-primary">$100M</div>
+                      <div className="text-2xl font-bold text-primary">{content.featuredCase.valuation}</div>
                       <div className="text-sm text-muted-foreground">Valuation</div>
                     </div>
                   </div>
@@ -107,26 +162,26 @@ const Portfolio = () => {
           {/* Stats Grid */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
             <div className="text-center">
-              <div className="text-3xl lg:text-4xl font-bold text-primary mb-2">140+</div>
+              <div className="text-3xl lg:text-4xl font-bold text-primary mb-2">{content.stats.clientsServed}</div>
               <div className="text-muted-foreground">Clients Served</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl lg:text-4xl font-bold text-primary mb-2">85%</div>
+              <div className="text-3xl lg:text-4xl font-bold text-primary mb-2">{content.stats.successRate}</div>
               <div className="text-muted-foreground">Success Rate</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl lg:text-4xl font-bold text-primary mb-2">₹50Cr</div>
+              <div className="text-3xl lg:text-4xl font-bold text-primary mb-2">{content.stats.revenueGenerated}</div>
               <div className="text-muted-foreground">Revenue Generated</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl lg:text-4xl font-bold text-primary mb-2">4.9★</div>
+              <div className="text-3xl lg:text-4xl font-bold text-primary mb-2">{content.stats.clientRating}</div>
               <div className="text-muted-foreground">Client Rating</div>
             </div>
           </div>
 
-          {/* Client Logos Placeholder */}
+          {/* Client Logos */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 items-center justify-items-center">
-            {["NUCLEAR", "VIBECRAFT", "Kidult India", "PVR CINEMAS"].map((client) => (
+            {content.clients.map((client) => (
               <div 
                 key={client}
                 className="w-32 h-16 bg-card border border-border rounded-lg flex items-center justify-center shadow-soft hover:shadow-card transition-shadow duration-300"
@@ -143,8 +198,7 @@ const Portfolio = () => {
             Join The
           </Badge>
           <h3 className="text-2xl lg:text-3xl font-bold mb-4">
-            These brands didn't just grow—they dominated. Ready to write your own success story and
-            join the ranks of market leaders?
+            {content.description}
           </h3>
           <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground mt-4">
             View Our Work
