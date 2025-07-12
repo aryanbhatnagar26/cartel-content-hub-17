@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -17,59 +18,52 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 162 73% 58%;
+    --primary: 142 76% 36%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 162 20% 95%;
+    --secondary: 142 20% 95%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 162 100% 90%;
-    --accent-foreground: 162 73% 25%;
+    --accent: 142 100% 90%;
+    --accent-foreground: 142 76% 25%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 162 73% 58%;
+    --ring: 142 76% 36%;
 
     --radius: 0.75rem;
 
-    /* Content Cartel Brand Colors */
-    --brand-green: 162 73% 58%;
-    --brand-green-light: 162 100% 90%;
-    --brand-green-dark: 162 73% 45%;
+    /* Content Cartel Brand Colors - Updated to Green Theme */
+    --brand-green: 142 76% 36%;
+    --brand-green-light: 142 100% 90%;
+    --brand-green-dark: 142 76% 25%;
     --brand-gray: 210 11% 71%;
     --brand-dark: 222.2 84% 4.9%;
     
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(162 100% 90%), hsl(162 73% 58%));
-    --gradient-hero: linear-gradient(135deg, hsl(162 100% 95%), hsl(162 50% 95%));
+    /* Gradients - Updated to Green Theme */
+    --gradient-primary: linear-gradient(135deg, hsl(142 100% 85%), hsl(142 76% 36%));
+    --gradient-hero: linear-gradient(135deg, hsl(142 100% 95%), hsl(142 50% 95%));
     
     /* Shadows */
-    --shadow-soft: 0 4px 20px -2px hsl(162 73% 58% / 0.1);
-    --shadow-card: 0 8px 30px -8px hsl(162 73% 58% / 0.15);
+    --shadow-soft: 0 4px 20px -2px hsl(142 76% 36% / 0.1);
+    --shadow-card: 0 8px 30px -8px hsl(142 76% 36% / 0.15);
     
     /* Transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -120,4 +114,14 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Add floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
 }

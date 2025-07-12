@@ -60,6 +60,11 @@ const AdminLayout = () => {
       icon: FileText,
     },
     {
+      name: 'Footer',
+      href: '/admin/footer',
+      icon: Palette,
+    },
+    {
       name: 'Theme',
       href: '/admin/theme',
       icon: Palette,

@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
 import { 
   Home, 
   Settings, 
@@ -14,27 +15,78 @@ import {
   Users,
   Edit3,
   BarChart3,
-  Clock
+  Clock,
+  Layout,
+  Save
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import SectionManager from '@/components/SectionManager';
+
+interface SectionItem {
+  id: string;
+  name: string;
+  component: string;
+  enabled: boolean;
+}
+
+const defaultSections: SectionItem[] = [
+  { id: 'hero', name: 'Hero Section', component: 'Hero', enabled: true },
+  { id: 'services', name: 'Services', component: 'Services', enabled: true },
+  { id: 'portfolio', name: 'Portfolio', component: 'Portfolio', enabled: true },
+  { id: 'about', name: 'About', component: 'About', enabled: true },
+  { id: 'blog', name: 'Blog', component: 'Blog', enabled: true },
+  { id: 'contact', name: 'Contact', component: 'Contact', enabled: true }
+];
 
 const AdminDashboard = () => {
   const { logout } = useAuth();
+  const { toast } = useToast();
   const [stats, setStats] = useState({
     blogPosts: 0,
     lastUpdated: null as string | null
   });
+  const [sections, setSections] = useState<SectionItem[]>(defaultSections);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     // Load stats from localStorage
     const blogPosts = JSON.parse(localStorage.getItem('blogPosts') || '[]');
     const siteContent = localStorage.getItem('siteContent');
     
+    // Load section order
+    const savedSections = localStorage.getItem('sectionOrder');
+    if (savedSections) {
+      setSections(JSON.parse(savedSections));
+    }
+    
     setStats({
       blogPosts: blogPosts.length,
       lastUpdated: siteContent ? new Date().toLocaleDateString() : null
     });
   }, []);
+
+  const handleSectionsChange = (newSections: SectionItem[]) => {
+    setSections(newSections);
+  };
+
+  const saveSectionOrder = async () => {
+    setIsLoading(true);
+    try {
+      localStorage.setItem('sectionOrder', JSON.stringify(sections));
+      toast({
+        title: "Success",
+        description: "Section order saved successfully",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to save section order",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const adminSections = [
     {
@@ -78,6 +130,13 @@ const AdminDashboard = () => {
       icon: FileText,
       href: '/admin/blog',
       color: 'bg-indigo-500'
+    },
+    {
+      title: 'Footer',
+      description: 'Edit footer content and links',
+      icon: Layout,
+      href: '/admin/footer',
+      color: 'bg-pink-500'
     }
   ];
 
@@ -86,7 +145,7 @@ const AdminDashboard = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-          <p className="text-muted-foreground">Manage your website content</p>
+          <p className="text-muted-foreground">Manage your website content and layout</p>
         </div>
         <Button variant="outline" onClick={logout}>
           Logout
@@ -114,9 +173,9 @@ const AdminDashboard = () => {
             <BarChart3 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">6</div>
+            <div className="text-2xl font-bold">{sections.filter(s => s.enabled).length}</div>
             <p className="text-xs text-muted-foreground">
-              Editable sections
+              Active sections
             </p>
           </CardContent>
         </Card>
@@ -137,38 +196,53 @@ const AdminDashboard = () => {
         </Card>
       </div>
 
-      {/* Admin Sections */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {adminSections.map((section) => (
-          <Link key={section.title} to={section.href}>
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-              <CardHeader>
-                <div className="flex items-center space-x-2">
-                  <div className={`p-2 rounded-lg ${section.color} text-white`}>
-                    <section.icon className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-lg">{section.title}</CardTitle>
-                    <CardDescription className="text-sm">
-                      {section.description}
-                    </CardDescription>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <Badge variant="outline">
-                    <Edit3 className="h-3 w-3 mr-1" />
-                    Edit Content
-                  </Badge>
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
+      {/* Section Manager */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold">Website Layout</h2>
+          <Button onClick={saveSectionOrder} disabled={isLoading}>
+            <Save className="w-4 h-4 mr-2" />
+            {isLoading ? "Saving..." : "Save Layout"}
+          </Button>
+        </div>
+        <SectionManager sections={sections} onSectionsChange={handleSectionsChange} />
       </div>
 
-      {/* Recent Activity */}
+      {/* Admin Sections */}
+      <div className="space-y-4">
+        <h2 className="text-2xl font-bold">Content Management</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {adminSections.map((section) => (
+            <Link key={section.title} to={section.href}>
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                <CardHeader>
+                  <div className="flex items-center space-x-2">
+                    <div className={`p-2 rounded-lg ${section.color} text-white`}>
+                      <section.icon className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-lg">{section.title}</CardTitle>
+                      <CardDescription className="text-sm">
+                        {section.description}
+                      </CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between">
+                    <Badge variant="outline">
+                      <Edit3 className="h-3 w-3 mr-1" />
+                      Edit Content
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* Quick Actions */}
       <Card>
         <CardHeader>
           <CardTitle>Quick Actions</CardTitle>
