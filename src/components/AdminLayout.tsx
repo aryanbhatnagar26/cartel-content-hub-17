@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -14,7 +13,8 @@ import {
   Menu,
   X,
   LogOut,
-  Zap
+  Zap,
+  Palette
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -58,6 +58,11 @@ const AdminLayout = () => {
       name: 'Blog',
       href: '/admin/blog',
       icon: FileText,
+    },
+    {
+      name: 'Theme',
+      href: '/admin/theme',
+      icon: Palette,
     },
   ];
 

@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Save, RotateCcw } from 'lucide-react';
+import ImageUpload from '@/components/ImageUpload';
 
 interface HomeContent {
   badge: {
@@ -27,6 +28,8 @@ interface HomeContent {
     audience: string;
     launchTime: string;
   };
+  backgroundImage?: string;
+  heroImage?: string;
 }
 
 const defaultContent: HomeContent = {
@@ -123,7 +126,27 @@ const AdminHome = () => {
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6">
+        {/* Images Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Hero Images</CardTitle>
+            <CardDescription>Upload images for the hero section</CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-4 md:grid-cols-2">
+            <ImageUpload
+              label="Background Image"
+              value={content.backgroundImage}
+              onChange={(value) => setContent(prev => ({ ...prev, backgroundImage: value }))}
+            />
+            <ImageUpload
+              label="Hero Image"
+              value={content.heroImage}
+              onChange={(value) => setContent(prev => ({ ...prev, heroImage: value }))}
+            />
+          </CardContent>
+        </Card>
+
         {/* Badge Section */}
         <Card>
           <CardHeader>
@@ -172,7 +195,7 @@ const AdminHome = () => {
         </Card>
 
         {/* Subtitle */}
-        <Card className="lg:col-span-2">
+        <Card>
           <CardHeader>
             <CardTitle>Subtitle</CardTitle>
             <CardDescription>The descriptive text below the headline</CardDescription>
